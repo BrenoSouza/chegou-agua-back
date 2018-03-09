@@ -1,5 +1,5 @@
-# SAD-EE-UFCG
-Projeto do Sistema de Avaliação Docente do Curso de Engenharia Elétrica da UFCG  
+# Chegou Agua
+Backend do projeto de verificação de nível de caixa d'agua desenvolvido na disciplina de Empreendedorismo em Software, período 2017.2 (UFCG)  
    
 To launch application:   
 On the project root folder run the command:     
