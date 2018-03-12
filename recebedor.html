@@ -5,7 +5,7 @@
     <title>Recebedor de notificações</title>
 </head>
 <body>
-<script src="http://localhost:4555/socket.io/socket.io.js"></script>
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
 <script>
     var socket = io('http://localhost:4555', {transports: ['websocket', 'polling', 'flashsocket']});
     socket.on('notificacao', function (data) {

@@ -19,19 +19,6 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 var router = express.Router();
 
-var emitir = function(req, res, next){
-    var notificar = req.query.notificacao || '';
-    if(notificar != '')	 {
-        io.emit('notificacao', notificar);
-        next();
-    } else {
-        next();
-    }
-}
-
-app.use(emitir);
-
-
 router.post('/armazena', function(req, res){
     var body = req.body;
 
@@ -54,7 +41,6 @@ router.post('/armazena', function(req, res){
             var array = new Array ({
                 array: a
             });
-            console.log('zerado')
             array.save(function (err, result) {
                 console.log(data)
                 if (err) {
@@ -70,7 +56,6 @@ router.post('/armazena', function(req, res){
                 }
             });
         }else{
-            console.log('tem gente')
             Array.findOne({}, function(err, a){
                 if(err){
                     return res.status(500).json({
@@ -92,18 +77,18 @@ router.post('/armazena', function(req, res){
                                 error: err
                             });
                         } else {
-                            console.log('removeu');
                         }
                     });
 
-                    novoArray.save(function (err, result) {
-                        console.log(data)
+                    novoArray.save(function (err, result, next) {
+                        console.log(result);
                         if (err) {
                             return res.status(500).json({
                                 title: 'An error occurred',
                                 error: err
                             });
                         } else {
+                            io.emit('notificacao',JSON.stringify(result.array[result.array.length - 1]));
                             res.status(200).json({
                                 message: 'Salvou geral!',
                                 obj: result
@@ -115,13 +100,6 @@ router.post('/armazena', function(req, res){
         }
     });
 });
-
-while(true) {
-
-    router.route('/notificar')
-        .get(function (req, res) {
-        })
-}
 
 app.listen(port);
 
