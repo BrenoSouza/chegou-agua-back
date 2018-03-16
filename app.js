@@ -36,7 +36,7 @@ app.use(function (req, res, next) {
 app.use('/', appRoutes);
 app.use('/api', appRoutes);
 app.use('/notificar', appRoutes);
-
+app.use('historico', appRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res) {

@@ -19,6 +19,21 @@ app.use(bodyParser.json());
 var port = process.env.PORT || 8080;
 var router = express.Router();
 
+var emitir = function(req, res, next){
+    Array.findOne({}, function(err, data){
+        var notificar = data.array[data.array.length-1];
+        //var notificar = req.query.notificacao || '';
+        if(notificar != '')	 {
+            io.emit('notificacao', notificar);
+            next();
+        } else {
+            next();
+        }
+    });
+}
+
+app.use(emitir);
+
 router.post('/armazena', function(req, res){
     var body = req.body;
 
@@ -42,7 +57,6 @@ router.post('/armazena', function(req, res){
                 array: a
             });
             array.save(function (err, result) {
-                console.log(data)
                 if (err) {
                     return res.status(500).json({
                         title: 'An error occurred',
@@ -81,13 +95,13 @@ router.post('/armazena', function(req, res){
                     });
 
                     novoArray.save(function (err, result, next) {
-                        console.log(result);
                         if (err) {
                             return res.status(500).json({
                                 title: 'An error occurred',
                                 error: err
                             });
                         } else {
+                            console.log('emitiu');
                             io.emit('notificacao',JSON.stringify(result.array[result.array.length - 1]));
                             res.status(200).json({
                                 message: 'Salvou geral!',
@@ -96,6 +110,22 @@ router.post('/armazena', function(req, res){
                         }
                     });
                 }
+            });
+        }
+    });
+});
+
+router.get('/historico', function(req, res){
+    Array.findOne({}, function(err, a) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        } else {
+            res.status(200).json({
+                message: 'Array enviado!',
+                obj: a.array
             });
         }
     });
